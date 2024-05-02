@@ -9,11 +9,11 @@ This plugin adds the following behaviour to the default behaviour of the `f`, `F
 
 It's also worth noting that it only adds the new position to the jumplist if you've changed lines.
 
-###Seek Operator###
+### Seek Operator ###
 
 vim-extended-ft also includes an option to use a version of the `f` and `F` operator with two characters instead of one.  This is disabled by default but can be enabled easily by including extra mappings in your vimrc.  See the bottom of the file `extended-ft.vim` for an example (commented out) of what those mappings would look like.
 
-###Customization###
+### Customization ###
 
 If you have remapped any of the `f`/`F`/`t`/`T`/`;`/`,` keys you can still use the plugin without changing it, by including the following in your .vimrc:
 
@@ -27,9 +27,9 @@ To disable smartcase matching, and either force case-sensitive or case-insensiti
 
 Possible values:
 
-* '\c' - Forces `ignorecase`
-* '\C' - Forces `noignorecase`
+- '\c' - Forces `ignorecase`
+- '\C' - Forces `noignorecase`
 
+`let g:ExtendedFT_timerDuration =`
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/svermeulen/vim-extended-ft/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+If this variable is set to a number, vim-extended-ft will turn off highlighting of found characters after that many milliseconds. If this variable does not exist, highlighting will remain on until `hlsearch` is turned off.

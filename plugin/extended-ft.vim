@@ -74,6 +74,10 @@ function! s:Search(count, char, dir, type)
 endfunction
 
 function! s:RunSearch(count, searchStr, dir, type)
+    if exists('w:ExtendedFT_timer')
+        call timer_stop(w:ExtendedFT_timer)
+        unlet w:ExtendedFT_timer
+    endif
     if !exists('g:ExtendedFT_caseOption')
         let caseOption = (a:searchStr =~# '\v\u') ? '\C' : '\c'
     else
@@ -82,7 +86,8 @@ function! s:RunSearch(count, searchStr, dir, type)
 
     let options = (a:dir ==# 'f') ? 'W' : 'Wb'
 
-    let pattern = caseOption . a:searchStr
+    " Need to escape these characters in very magic mode
+    let pattern = caseOption . escape(a:searchStr, '\')
 
     if a:type ==# 't'
         if a:dir ==# 'f'
@@ -110,7 +115,7 @@ function! s:RunSearch(count, searchStr, dir, type)
     call s:RemoveHighlight()
     call s:AttachAutoCommands()
 
-    let matchQuery = pattern
+    let matchQuery = escape(pattern, '~.')  " Need to escape these!
 
     if len(a:searchStr) == 1
         let currentLine = line('.')
@@ -118,6 +123,16 @@ function! s:RunSearch(count, searchStr, dir, type)
     endif
 
     let w:highlightId = matchadd('Search', matchQuery, 2, get(w:, 'highlightId', -1))
+    if exists('g:ExtendedFT_timerDuration')
+        let w:ExtendedFT_timer = timer_start(g:ExtendedFT_timerDuration, '<SID>ClearMatch')
+    endif
+endfunction
+
+function! s:ClearMatch(...)
+    call clearmatches()
+    if exists('w:ExtendedFT_timer')
+        unlet w:ExtendedFT_timer
+    endif
 endfunction
 
 function! s:RepeatSearchForward(count, mode)
